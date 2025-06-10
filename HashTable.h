@@ -19,10 +19,10 @@ public:
     void insert(DrachmaCurrency* data);
     void deleteData(const DrachmaCurrency& target);
     int search(const DrachmaCurrency& target);
-
     int getNumItems() const { return count; }
     int getNumCollisions() const { return numCollisions; }
     double getLoadFactor() const { return static_cast<double>(count) / TABLE_SIZE; }
+    void print() const;
 
 private:
     HashNode table[TABLE_SIZE];
@@ -152,4 +152,17 @@ inline void HashTable::rehash() {
         insert(oldData[i]);
     }
     delete [] oldData;
+}
+
+inline void HashTable::print() const {
+    std::cout << "The hash table data:" << std::endl;
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        if (table[i].data != nullptr) {
+            table[i].data->print();
+            std::cout << std::endl;
+        }
+    }
+    std::cout << std::endl;
+    std::cout << "The load factor: " << getLoadFactor() << std::endl;
+    std::cout << "The number of collisions: " << getNumCollisions() << std::endl;
 }
