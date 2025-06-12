@@ -19,8 +19,29 @@ public:
     void insert(DrachmaCurrency* data);
     void deleteData(const DrachmaCurrency& target);
     int search(const DrachmaCurrency& target);
+    /**
+     *  Method getNumItems()
+     * - returns the amount of items in the table
+     * @pre
+     * @post
+     * @return - count - total amount of items in the table
+     */
     int getNumItems() const { return count; }
+    /**
+     *  Method getNumItems()
+     * - returns the amount of collisions in the table
+     * @pre
+     * @post
+     * @return - numCollisions - total amount of items in the table
+    */
     int getNumCollisions() const { return numCollisions; }
+    /**
+     *  Method getLoadFactor()
+     * - returns the load factor of the table
+     * @pre
+     * @post
+     * @return -load - the division of the count by the table size to see how full the table is
+     */
     double getLoadFactor() const { return static_cast<double>(count) / TABLE_SIZE; }
     void print() const;
 
