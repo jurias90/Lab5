@@ -42,7 +42,13 @@ private:
     void rehash();
 };
 
-
+/**
+   Method insert(data)
+       -This method will add a new node to the hash table
+       Pre: data - the currency data to be added
+       Post: add the data into the hash table if it's not in the table yet and the table is not full
+       Return: N/A
+   **/
 inline void HashTable::insert(DrachmaCurrency* data) {
     if (!data) {
         throw std::invalid_argument("Cannot insert a NULL pointer.");
@@ -55,6 +61,10 @@ inline void HashTable::insert(DrachmaCurrency* data) {
     // Probe to find an available slot.
     int probeIndex = index;
     while (table[probeIndex].is_occupied && table[probeIndex].data != nullptr) {
+        if (table[probeIndex].data->isEqual(*data)) {
+            // return if data is already in the table
+            return;
+        }
         if (!collisionOccurred) {
             numCollisions++;
             collisionOccurred = true;
@@ -83,7 +93,13 @@ inline void HashTable::insert(DrachmaCurrency* data) {
     count++;
 }
 
-
+/**
+   Method deleteData(target)
+       -This method will delete the target currency from the table
+       Pre: target - the currency target to be removed
+       Post: remove the target from the table if found, but keep the node occupied as a placeholder for probe chain search
+       Return: N/A
+   **/
 inline void HashTable::deleteData(const DrachmaCurrency& target) {
     if (count == 0) return; // Table is empty
 
@@ -98,7 +114,13 @@ inline void HashTable::deleteData(const DrachmaCurrency& target) {
     }
 }
 
-
+/**
+   Method search(target)
+       -This method will search the target currency from the table
+       Pre: target - the currency target to be searched
+       Post: return the index of the target if found or -1
+       Return: index of hash node holding the target or -1
+   **/
 inline int HashTable::search(const DrachmaCurrency& target) {
     if (count == 0) return -1;
 
@@ -126,8 +148,15 @@ inline int HashTable::search(const DrachmaCurrency& target) {
     return -1;
 }
 
+/**
+   Method rehash()
+       -This method will empty the hash table and recreate it to remove all the placeholders to make up space
+       Pre: the hash table
+       Post: the hash table with all placeholder removed
+       Return: N/A
+   **/
 inline void HashTable::rehash() {
-    // 1. Create a temporary vector to hold the pointers to the actual data.
+    // Create a temporary vector to hold the pointers to the actual data.
     DrachmaCurrency** oldData;
     oldData = new DrachmaCurrency*[count];
     int j = 0;
@@ -138,7 +167,7 @@ inline void HashTable::rehash() {
         }
     }
 
-    // 2. Reset the current table
+    // Reset the current table
     for (int i = 0; i < TABLE_SIZE; ++i) {
         table[i].data = nullptr;
         table[i].is_occupied = false;
@@ -146,14 +175,20 @@ inline void HashTable::rehash() {
     count = 0;
     numCollisions = 0;
 
-    // 3. Re-insert the data from the temporary vector into the clean table.
-    // The insert() method will handle all hashing and collision logic correctly.
+    // Re-insert the data
     for (int i = 0; i < count; i++) {
         insert(oldData[i]);
     }
     delete [] oldData;
 }
 
+/**
+   Method print()
+       -This method will print the hash table data and its load factor and number of collisions
+       Pre: the hash table
+       Post: standard output of the hash table data and its load factor and number of collisions
+       Return: N/A
+   **/
 inline void HashTable::print() const {
     std::cout << "The hash table data:" << std::endl;
     for (int i = 0; i < TABLE_SIZE; i++) {
@@ -163,6 +198,7 @@ inline void HashTable::print() const {
         }
     }
     std::cout << std::endl;
+    std::cout << "Loaded: " << count << " items" << std::endl;
     std::cout << "The load factor: " << getLoadFactor() << std::endl;
     std::cout << "The number of collisions: " << getNumCollisions() << std::endl;
 }

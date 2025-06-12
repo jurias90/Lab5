@@ -1,8 +1,8 @@
 /**
-Lab #4
+Lab #5
     Group CPP2
     Team Memebers: Jesus Urias, Nhung Vo
-    Purpose: The purpose of this lab is implement a BST ADT for DrachmaCurrency
+    Purpose: The purpose of this lab is implement a HashTable ADT for DrachmaCurrency
 **/
 
 #include <iostream>
@@ -37,14 +37,26 @@ int main()
     cout << "Please enter a value to search in the table (xx.xx format) or -1 to quit: ";
     cin >> choice;
     while (choice != -1) {
-        index = table->search(choice);
-        if (index != -1) {
-            cout << "Value found at index " << index << endl;
+        try
+        {
+            DrachmaCurrency target(choice);
+            index = table->search(target);
+            if (index != -1) {
+                cout << "Value found at index " << index << endl;
+            }
+            else {
+                cout << "Item not found" << endl;
+            }
         }
-        else {
-            cout << "Invalid Data" << endl;
+        catch (const exception& e)
+        {
+            cout << "Error: " << e.what() << endl;
+        }
+        catch (const string& str_e) {
+            cout << "Error: " << str_e << endl;
         }
         cout << "Please enter a value to search in the table (xx.xx format) or -1 to quit: ";
         cin >> choice;
     }
+    return 0;
    }
